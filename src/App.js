@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useState} from 'react'
+import AddBook from './components/AddBook';
+import ShowBooks from './components/ShowBooks';
 
-function App() {
+const App = () => {
+    const [book,setBook] = useState([]);
+
+    const handleSubmit = (title,author,page) => {
+        const titleMatch = book?.filter((b) => b.title === title);
+        console.log(titleMatch);
+        if(titleMatch.length>0){
+            titleMatch[0].page = Number(titleMatch[0].page) + Number(page);
+            const books = book?.filter((b) => b.title !== title);
+            setBook([titleMatch[0],...books]);
+        } else{
+            const newBook = {
+                title,author,page
+            };
+            setBook([newBook, ...book]);
+        }
+    }
+    
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+        <h1>Ops Tree</h1>
+        <AddBook handleSubmit={handleSubmit}/>
+        <ShowBooks book={book}/>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
